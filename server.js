@@ -23,17 +23,18 @@ const SCOPES = [
 // 基本設定
 // --------------------------------------------------
 
-app.use(express.json());
+app.set("trust proxy", 1);
 
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "change-this-session-secret",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    proxy: true,
     cookie: {
       httpOnly: true,
+      secure: true,
       sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
       maxAge: 1000 * 60 * 60 * 24 * 7,
     },
   })
