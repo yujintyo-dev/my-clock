@@ -1,0 +1,23 @@
+{
+  "name": "My Clock",
+  "short_name": "My Clock",
+  "description": "時計・予定・天気・TODOをまとめて表示する自分用ダッシュボード",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#202532",
+  "theme_color": "#202532",
+  "orientation": "any",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

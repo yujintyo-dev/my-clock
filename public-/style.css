@@ -1,0 +1,1555 @@
+/* =========================================================
+   My Clock - 現在の index.html / script.js に完全対応
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  --bg: #202532;
+  --panel: #292f3d;
+  --panel-soft: #323949;
+  --text: #f4f6fa;
+  --text-soft: #aeb6c6;
+  --accent: #8fb7ff;
+  --accent-soft: rgba(143, 183, 255, 0.15);
+  --border: rgba(255, 255, 255, 0.09);
+
+  min-height: 100%;
+  overflow: hidden;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Noto Sans JP",
+    "Yu Gothic",
+    "Meiryo",
+    sans-serif;
+
+  background: var(--bg);
+  color: var(--text);
+
+  transition:
+    background-color 0.8s ease,
+    color 0.5s ease;
+}
+
+/* =========================================================
+   テーマ
+   ========================================================= */
+
+body[data-theme="midnight"] {
+  --bg: #202532;
+  --panel: #292f3d;
+  --panel-soft: #323949;
+  --text: #f4f6fa;
+  --text-soft: #aeb6c6;
+  --accent: #8fb7ff;
+  --accent-soft: rgba(143, 183, 255, 0.15);
+  --border: rgba(255,255,255,0.09);
+}
+
+body[data-theme="forest"] {
+  --bg: #202d29;
+  --panel: #293b35;
+  --panel-soft: #324840;
+  --text: #f1f6f2;
+  --text-soft: #b4c6bc;
+  --accent: #91d4b1;
+  --accent-soft: rgba(145,212,177,0.15);
+  --border: rgba(255,255,255,0.09);
+}
+
+body[data-theme="lavender"] {
+  --bg: #292738;
+  --panel: #353149;
+  --panel-soft: #403a56;
+  --text: #f5f3fa;
+  --text-soft: #c4bdd7;
+  --accent: #c3a8f5;
+  --accent-soft: rgba(195,168,245,0.15);
+  --border: rgba(255,255,255,0.09);
+}
+
+body[data-theme="sand"] {
+  --bg: #38352f;
+  --panel: #474239;
+  --panel-soft: #514b40;
+  --text: #f8f5ec;
+  --text-soft: #d2cbbb;
+  --accent: #e4c98c;
+  --accent-soft: rgba(228,201,140,0.15);
+  --border: rgba(255,255,255,0.10);
+}
+
+body[data-theme="blue"] {
+  --bg: #202d3b;
+  --panel: #293a4d;
+  --panel-soft: #33475b;
+  --text: #f2f7fb;
+  --text-soft: #b6c6d4;
+  --accent: #8bc7e8;
+  --accent-soft: rgba(139,199,232,0.15);
+  --border: rgba(255,255,255,0.09);
+}
+
+/* 将来テーマ用 */
+body[data-theme="peach"] {
+  --bg: #fff4ef;
+  --panel: #ffffff;
+  --panel-soft: #fff0e9;
+  --text: #493c3b;
+  --text-soft: #81716f;
+  --accent: #ee947c;
+  --accent-soft: rgba(238,148,124,0.14);
+  --border: rgba(90,60,50,0.10);
+}
+
+body[data-theme="mint"] {
+  --bg: #effaf5;
+  --panel: #ffffff;
+  --panel-soft: #e7f7ef;
+  --text: #354840;
+  --text-soft: #6e8178;
+  --accent: #61b995;
+  --accent-soft: rgba(97,185,149,0.14);
+  --border: rgba(50,90,70,0.10);
+}
+
+body[data-theme="lemon"] {
+  --bg: #fffceb;
+  --panel: #ffffff;
+  --panel-soft: #fff8d8;
+  --text: #494631;
+  --text-soft: #817b5c;
+  --accent: #d6b94f;
+  --accent-soft: rgba(214,185,79,0.14);
+  --border: rgba(100,90,30,0.10);
+}
+
+body[data-theme="sky"] {
+  --bg: #eef8ff;
+  --panel: #ffffff;
+  --panel-soft: #e4f3fc;
+  --text: #354653;
+  --text-soft: #71818c;
+  --accent: #65a9d0;
+  --accent-soft: rgba(101,169,208,0.14);
+  --border: rgba(50,90,120,0.10);
+}
+
+body[data-theme="pink"] {
+  --bg: #fff0f6;
+  --panel: #ffffff;
+  --panel-soft: #ffe5ef;
+  --text: #4c3942;
+  --text-soft: #806b74;
+  --accent: #d77fa2;
+  --accent-soft: rgba(215,127,162,0.14);
+  --border: rgba(100,50,70,0.10);
+}
+
+/* 毎時55～59分 */
+body.hour-soon {
+  --accent-soft: color-mix(
+    in srgb,
+    var(--accent-soft) 70%,
+    rgba(231,185,107,0.18)
+  );
+}
+
+body.hour-soon::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background: linear-gradient(
+    135deg,
+    rgba(255,205,120,0.025),
+    transparent 45%
+  );
+}
+
+/* =========================================================
+   メイン画面
+   ========================================================= */
+
+.dashboard {
+  width: 100%;
+  height: 100dvh;
+  min-height: 0;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
+
+  gap: clamp(12px, 2vw, 28px);
+
+  padding:
+    max(12px, env(safe-area-inset-top))
+    max(12px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom))
+    max(12px, env(safe-area-inset-left));
+}
+
+/* =========================================================
+   左側
+   ========================================================= */
+
+.left-panel {
+  min-width: 0;
+  min-height: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+.left-content {
+  width: min(100%, 720px);
+  height: 100%;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: clamp(8px, 1.5vh, 18px);
+}
+
+/* =========================================================
+   時計
+   ========================================================= */
+
+.clock-row {
+  flex: 0 0 auto;
+
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+
+  white-space: nowrap;
+  line-height: 1;
+}
+
+#clock-hour-minute {
+  font-size: clamp(64px, 11vw, 158px);
+  font-weight: 700;
+  letter-spacing: -0.055em;
+  font-variant-numeric: tabular-nums;
+}
+
+#clock-seconds {
+  margin-left: clamp(6px, 0.9vw, 14px);
+
+  font-size: clamp(13px, 1.8vw, 25px);
+  font-weight: 500;
+
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================
+   日付・天気
+   ========================================================= */
+
+.date-weather-row {
+  flex: 0 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: clamp(12px, 2vw, 24px);
+
+  width: 100%;
+}
+
+#date {
+  font-size: clamp(12px, 1.5vw, 18px);
+  color: var(--text-soft);
+  white-space: nowrap;
+}
+
+.weather {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  font-size: clamp(12px, 1.4vw, 18px);
+  color: var(--text-soft);
+  white-space: nowrap;
+}
+
+.weather-icon {
+  line-height: 1;
+}
+
+/* =========================================================
+   月間カレンダー
+   ========================================================= */
+
+.calendar-box {
+  width: min(100%, 560px);
+  flex: 0 1 52%;
+
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: clamp(8px, 1.2vw, 16px);
+
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+
+  overflow: hidden;
+}
+
+.calendar-header {
+  flex: 0 0 auto;
+
+  display: grid;
+  grid-template-columns: 36px 1fr 36px;
+  align-items: center;
+
+  margin-bottom: clamp(4px, 0.8vh, 9px);
+}
+
+#month-title {
+  text-align: center;
+
+  font-size: clamp(13px, 1.4vw, 18px);
+  font-weight: 600;
+}
+
+.calendar-nav {
+  width: 32px;
+  height: 32px;
+
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+
+  background: transparent;
+  color: var(--text-soft);
+
+  font-size: 24px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.calendar-nav:hover {
+  background: var(--panel-soft);
+  color: var(--text);
+}
+
+.calendar-weekdays,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.calendar-weekdays {
+  flex: 0 0 auto;
+  margin-bottom: 3px;
+}
+
+.weekday {
+  text-align: center;
+  font-size: clamp(9px, 1vw, 13px);
+  font-weight: 600;
+  color: var(--text-soft);
+}
+
+.weekday.sunday,
+.calendar-day.sunday,
+.calendar-day.holiday {
+  color: #dc7d7d;
+}
+
+.weekday.saturday,
+.calendar-day.saturday {
+  color: #6fa8d5;
+}
+
+.calendar-grid {
+  flex: 1 1 auto;
+  min-height: 0;
+
+  grid-auto-rows: minmax(0, 1fr);
+  gap: clamp(1px, 0.3vw, 4px);
+}
+
+.calendar-day {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 7px;
+
+  font-size: clamp(10px, 1.05vw, 15px);
+  color: var(--text);
+
+  cursor: default;
+}
+
+.calendar-day-number {
+  position: relative;
+  z-index: 1;
+}
+
+.calendar-day.today {
+  background: var(--accent-soft);
+  font-weight: 700;
+}
+
+.calendar-day.has-event::after {
+  content: "";
+
+  position: absolute;
+  left: 50%;
+  bottom: 8%;
+
+  width: 4px;
+  height: 4px;
+
+  border-radius: 50%;
+  background: var(--accent);
+
+  transform: translateX(-50%);
+}
+
+.calendar-day.empty {
+  opacity: 0;
+}
+
+/* =========================================================
+   右側
+   ========================================================= */
+
+.right-panel {
+  min-width: 0;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: clamp(8px, 1.2vh, 14px);
+
+  overflow: hidden;
+}
+
+.top-bar {
+  flex: 0 0 auto;
+
+  min-height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 2px;
+}
+
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  min-width: 0;
+
+  color: var(--text-soft);
+  font-size: 11px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+
+  border-radius: 50%;
+  background: #8d96a6;
+}
+
+.status-dot.connected {
+  background: #72c48d;
+}
+
+.icon-button {
+  width: 34px;
+  height: 34px;
+
+  border: 1px solid var(--border);
+  border-radius: 9px;
+
+  background: var(--panel);
+  color: var(--text-soft);
+
+  font-size: 17px;
+
+  cursor: pointer;
+}
+
+.icon-button:hover {
+  background: var(--panel-soft);
+  color: var(--text);
+}
+
+/* =========================================================
+   NEXT / MAIL / TODO
+   ========================================================= */
+
+.dashboard-section {
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: clamp(9px, 1vw, 13px);
+
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  overflow: hidden;
+}
+
+.dashboard-section:nth-of-type(1) {
+  flex: 1.25 1 0;
+}
+
+.dashboard-section:nth-of-type(2) {
+  flex: 0.9 1 0;
+}
+
+.todo-section {
+  flex: 1 1 0 !important;
+}
+
+.section-heading {
+  flex: 0 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 7px;
+}
+
+.section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+
+  color: var(--accent);
+}
+
+.section-status {
+  font-size: 10px;
+  color: var(--text-soft);
+}
+
+.event-list,
+.mail-list,
+.todo-list {
+  min-height: 0;
+  overflow: auto;
+
+  scrollbar-width: thin;
+}
+
+.event-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.empty-state {
+  padding: 10px 4px;
+
+  color: var(--text-soft);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   カレンダー予定
+   ========================================================= */
+
+.event-card {
+  flex: 0 0 auto;
+
+  padding: 7px 8px;
+
+  border: 1px solid var(--border);
+  border-radius: 8px;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.event-card:hover {
+  background: var(--panel-soft);
+  transform: translateY(-1px);
+}
+
+.event-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.event-time {
+  min-width: 0;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.event-countdown {
+  min-width: 0;
+
+  font-size: 9px;
+  color: var(--text-soft);
+
+  white-space: nowrap;
+}
+
+.event-title {
+  margin-top: 3px;
+
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.35;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-location,
+.event-description-preview {
+  margin-top: 2px;
+
+  font-size: 9px;
+  line-height: 1.35;
+
+  color: var(--text-soft);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =========================================================
+   Gmail
+   ========================================================= */
+
+.mail-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.mail-item {
+  padding: 6px 3px;
+
+  border-bottom: 1px solid var(--border);
+
+  cursor: pointer;
+}
+
+.mail-item:last-child {
+  border-bottom: 0;
+}
+
+.mail-item:hover {
+  background: var(--panel-soft);
+}
+
+.mail-from {
+  font-size: 9px;
+  color: var(--text-soft);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mail-subject {
+  margin-top: 2px;
+
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.35;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mail-date {
+  margin-top: 2px;
+
+  font-size: 8px;
+  color: var(--text-soft);
+}
+
+/* =========================================================
+   TODO
+   ========================================================= */
+
+.todo-input-row {
+  flex: 0 0 auto;
+
+  display: flex;
+  gap: 5px;
+
+  margin-bottom: 6px;
+}
+
+#todo-input {
+  min-width: 0;
+  flex: 1;
+
+  height: 30px;
+  padding: 0 9px;
+
+  border: 1px solid var(--border);
+  border-radius: 7px;
+
+  outline: none;
+
+  background: var(--panel-soft);
+  color: var(--text);
+
+  font: inherit;
+  font-size: 11px;
+}
+
+#todo-input::placeholder {
+  color: var(--text-soft);
+}
+
+#todo-input:focus {
+  border-color: var(--accent);
+}
+
+.todo-add-button {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+
+  border: 0;
+  border-radius: 7px;
+
+  background: var(--accent);
+  color: var(--bg);
+
+  font-size: 18px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.todo-item {
+  min-height: 30px;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 4px 2px;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.todo-check {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+
+  accent-color: var(--accent);
+}
+
+.todo-text {
+  min-width: 0;
+  flex: 1;
+
+  font-size: 10px;
+  line-height: 1.35;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.todo-item.completed .todo-text {
+  color: var(--text-soft);
+  text-decoration: line-through;
+}
+
+.todo-delete {
+  width: 22px;
+  height: 22px;
+
+  flex: 0 0 22px;
+
+  border: 0;
+  border-radius: 5px;
+
+  background: transparent;
+  color: var(--text-soft);
+
+  cursor: pointer;
+}
+
+.todo-delete:hover {
+  background: var(--panel-soft);
+  color: var(--text);
+}
+
+/* =========================================================
+   設定・予定詳細モーダル
+   ========================================================= */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 18px;
+
+  background: rgba(0,0,0,0.42);
+  backdrop-filter: blur(5px);
+}
+
+.modal-overlay.hidden,
+#settings-overlay.hidden,
+#event-overlay.hidden {
+  display: none !important;
+}
+
+.settings-modal,
+.event-modal {
+  width: min(680px, 94vw);
+  max-height: 90dvh;
+
+  display: flex;
+  flex-direction: column;
+
+  background: var(--panel);
+  color: var(--text);
+
+  border: 1px solid var(--border);
+  border-radius: 16px;
+
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+
+  overflow: hidden;
+}
+
+.settings-header,
+.event-modal-header {
+  flex: 0 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 16px 18px;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.settings-title,
+.event-modal-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.settings-subtitle {
+  margin-top: 2px;
+  font-size: 10px;
+  color: var(--text-soft);
+}
+
+.modal-close {
+  width: 34px;
+  height: 34px;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: transparent;
+  color: var(--text-soft);
+
+  font-size: 25px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  background: var(--panel-soft);
+  color: var(--text);
+}
+
+.settings-body {
+  min-height: 0;
+  overflow: auto;
+
+  padding: 16px 18px;
+}
+
+.settings-group {
+  margin-bottom: 20px;
+}
+
+.settings-group:last-child {
+  margin-bottom: 0;
+}
+
+.settings-group h2 {
+  margin: 0 0 8px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  color: var(--accent);
+}
+
+.settings-card {
+  padding: 12px;
+
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.settings-card-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+
+  padding: 5px 0;
+}
+
+.settings-card-row + .settings-card-row {
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.settings-label {
+  display: block;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.settings-description {
+  display: block;
+
+  margin-top: 3px;
+
+  font-size: 10px;
+  line-height: 1.5;
+
+  color: var(--text-soft);
+}
+
+.settings-button {
+  min-height: 32px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 11px;
+
+  border: 1px solid var(--border);
+  border-radius: 7px;
+
+  background: var(--panel);
+  color: var(--text);
+
+  font: inherit;
+  font-size: 11px;
+
+  text-decoration: none;
+  cursor: pointer;
+
+  white-space: nowrap;
+}
+
+.settings-button:hover {
+  background: var(--panel-soft);
+}
+
+.settings-button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+
+.settings-button.danger {
+  color: #e88b8b;
+}
+
+.selected-location {
+  margin: 7px 0;
+
+  font-size: 11px;
+  color: var(--text-soft);
+}
+
+.weather-search-row {
+  display: flex;
+  gap: 6px;
+}
+
+#weather-search-input {
+  min-width: 0;
+  flex: 1;
+
+  height: 32px;
+  padding: 0 9px;
+
+  border: 1px solid var(--border);
+  border-radius: 7px;
+
+  background: var(--panel);
+  color: var(--text);
+
+  outline: none;
+  font: inherit;
+  font-size: 11px;
+}
+
+#weather-search-input:focus {
+  border-color: var(--accent);
+}
+
+.weather-search-results {
+  margin-top: 7px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.weather-result {
+  width: 100%;
+
+  padding: 8px 9px;
+
+  text-align: left;
+
+  border: 1px solid var(--border);
+  border-radius: 8px;
+
+  background: var(--panel);
+  color: var(--text);
+
+  cursor: pointer;
+}
+
+.weather-result:hover {
+  background: var(--panel-soft);
+}
+
+.weather-result-name {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.weather-result-detail {
+  margin-top: 2px;
+
+  font-size: 9px;
+  color: var(--text-soft);
+}
+
+.theme-grid,
+.font-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.theme-option,
+.font-option {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+
+  padding: 8px 5px;
+
+  border: 1px solid var(--border);
+  border-radius: 9px;
+
+  background: var(--panel);
+  color: var(--text-soft);
+
+  font: inherit;
+  font-size: 9px;
+
+  cursor: pointer;
+}
+
+.theme-option:hover,
+.font-option:hover,
+.theme-option.selected,
+.font-option.selected {
+  border-color: var(--accent);
+  color: var(--text);
+  background: var(--panel-soft);
+}
+
+.theme-preview {
+  width: 100%;
+  height: 24px;
+
+  border-radius: 5px;
+}
+
+.midnight-preview { background: #202532; }
+.forest-preview { background: #202d29; }
+.lavender-preview { background: #292738; }
+.sand-preview { background: #38352f; }
+.blue-preview { background: #202d3b; }
+
+.font-sample {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.font-system {
+  font-family: system-ui, sans-serif;
+}
+
+.font-yugothic {
+  font-family: "Yu Gothic", sans-serif;
+}
+
+.font-meiryo {
+  font-family: Meiryo, sans-serif;
+}
+
+.font-bizud {
+  font-family: "BIZ UDPGothic", "BIZ UDPゴシック", sans-serif;
+}
+
+.font-notosans {
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  cursor: pointer;
+}
+
+.toggle {
+  position: relative;
+
+  width: 44px;
+  height: 24px;
+
+  flex: 0 0 auto;
+}
+
+.toggle input {
+  position: absolute;
+  opacity: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+
+  border-radius: 999px;
+
+  background: var(--text-soft);
+
+  transition: 0.2s;
+}
+
+.toggle-slider::before {
+  content: "";
+
+  position: absolute;
+
+  width: 18px;
+  height: 18px;
+
+  left: 3px;
+  top: 3px;
+
+  border-radius: 50%;
+
+  background: white;
+
+  transition: 0.2s;
+}
+
+.toggle input:checked + .toggle-slider {
+  background: var(--accent);
+}
+
+.toggle input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+}
+
+.settings-note {
+  padding: 10px 12px;
+
+  border: 1px solid var(--border);
+  border-radius: 9px;
+
+  background: var(--panel-soft);
+
+  color: var(--text-soft);
+
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.settings-note p {
+  margin: 0;
+}
+
+.settings-note p + p {
+  margin-top: 7px;
+}
+
+.settings-footer {
+  flex: 0 0 auto;
+
+  display: flex;
+  justify-content: flex-end;
+
+  padding: 11px 18px;
+
+  border-top: 1px solid var(--border);
+}
+
+/* 予定詳細 */
+.event-modal-body {
+  min-height: 0;
+  overflow: auto;
+
+  padding: 16px 18px;
+}
+
+.detail-row {
+  padding: 10px 0;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.detail-row:last-child {
+  border-bottom: 0;
+}
+
+.detail-label {
+  margin-bottom: 4px;
+
+  font-size: 10px;
+  color: var(--text-soft);
+}
+
+.detail-value {
+  font-size: 12px;
+  line-height: 1.6;
+
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.detail-link {
+  color: var(--accent);
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.detail-link:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   Toast
+   ========================================================= */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: max(18px, env(safe-area-inset-bottom));
+
+  z-index: 20000;
+
+  max-width: calc(100vw - 32px);
+
+  padding: 9px 14px;
+
+  border: 1px solid var(--border);
+  border-radius: 999px;
+
+  background: var(--panel);
+  color: var(--text);
+
+  box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+
+  font-size: 11px;
+
+  transform: translateX(-50%);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* =========================================================
+   フォント設定
+   ========================================================= */
+
+body[data-font="system"] {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif;
+}
+
+body[data-font="yugothic"] {
+  font-family: "Yu Gothic", "YuGothic", sans-serif;
+}
+
+body[data-font="meiryo"] {
+  font-family: Meiryo, sans-serif;
+}
+
+body[data-font="bizud"] {
+  font-family: "BIZ UDPGothic", "BIZ UDPゴシック", sans-serif;
+}
+
+body[data-font="notosans"] {
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+/* =========================================================
+   スマホ横向き
+   ========================================================= */
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .dashboard {
+    gap: 8px;
+    padding: 7px;
+  }
+
+  .left-content {
+    gap: 5px;
+  }
+
+  #clock-hour-minute {
+    font-size: clamp(44px, 16vh, 92px);
+  }
+
+  #clock-seconds {
+    font-size: clamp(10px, 2.4vh, 16px);
+  }
+
+  #date,
+  .weather {
+    font-size: clamp(9px, 2vh, 13px);
+  }
+
+  .calendar-box {
+    padding: 5px;
+  }
+
+  .calendar-header {
+    grid-template-columns: 28px 1fr 28px;
+    margin-bottom: 2px;
+  }
+
+  .calendar-nav {
+    width: 26px;
+    height: 26px;
+    font-size: 20px;
+  }
+
+  .weekday,
+  .calendar-day {
+    font-size: clamp(8px, 1.9vh, 11px);
+  }
+
+  .dashboard-section {
+    padding: 6px 8px;
+  }
+
+  .section-heading {
+    margin-bottom: 3px;
+  }
+
+  .event-card {
+    padding: 4px 6px;
+  }
+
+  .event-title {
+    font-size: 9px;
+  }
+
+  .event-time,
+  .event-countdown {
+    font-size: 8px;
+  }
+
+  .mail-item {
+    padding: 3px;
+  }
+
+  .mail-subject {
+    font-size: 9px;
+  }
+
+  .todo-input-row {
+    margin-bottom: 3px;
+  }
+
+  #todo-input,
+  .todo-add-button {
+    height: 25px;
+  }
+
+  .todo-item {
+    min-height: 24px;
+  }
+
+  .todo-text {
+    font-size: 9px;
+  }
+}
+
+/* =========================================================
+   スマホ縦向き
+   ========================================================= */
+
+@media (orientation: portrait) and (max-width: 700px) {
+  html,
+  body {
+    height: auto;
+    min-height: 100%;
+    overflow: auto;
+  }
+
+  .dashboard {
+    height: auto;
+    min-height: 100dvh;
+
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(55dvh, auto) minmax(45dvh, auto);
+
+    padding: max(10px, env(safe-area-inset-top))
+      max(10px, env(safe-area-inset-right))
+      max(10px, env(safe-area-inset-bottom))
+      max(10px, env(safe-area-inset-left));
+  }
+
+  .left-panel {
+    min-height: 55dvh;
+  }
+
+  .right-panel {
+    min-height: 45dvh;
+    overflow: visible;
+  }
+
+  .left-content {
+    width: 100%;
+  }
+
+  .calendar-box {
+    width: min(100%, 520px);
+    flex: 1 1 auto;
+  }
+
+  .theme-grid,
+  .font-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   非常に小さい画面
+   ========================================================= */
+
+@media (max-width: 420px) {
+  .dashboard {
+    padding: 7px;
+    gap: 7px;
+  }
+
+  .date-weather-row {
+    gap: 8px;
+  }
+
+  .calendar-box {
+    padding: 6px;
+  }
+
+  .settings-card-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .theme-grid,
+  .font-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
