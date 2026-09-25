@@ -313,7 +313,7 @@ body.hour-soon::after {
   display: flex;
   flex-direction: column;
 
-  padding: clamp(8px, 1.2vw, 16px);
+  padding: clamp(20px, 1.2vw, 16px);
 
   background: transparent;
   border: none;
