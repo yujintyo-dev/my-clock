@@ -305,7 +305,7 @@ body.hour-soon::after {
    ========================================================= */
 
 .calendar-box {
-  width: min(100%, 560px);
+  width: min(100%, 500px);
   flex: 0 1 52%;
 
   min-height: 0;
