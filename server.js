@@ -25,6 +25,10 @@ const SCOPES = [
 
 app.use(express.json());
 
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1);
+}
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "change-this-session-secret",
@@ -33,7 +37,7 @@ app.use(
     cookie: {
       httpOnly: true,
       sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
+      secure: "auto",
       maxAge: 1000 * 60 * 60 * 24 * 7,
     },
   })
