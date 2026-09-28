@@ -134,10 +134,34 @@ app.get("/auth/google", (req, res) => {
     `);
   }
 
+  const redirectUrl = new URL(
+    process.env.GOOGLE_REDIRECT_URI
+  );
+
+  if (req.get("host") !== redirectUrl.host) {
+    return res.redirect(
+      new URL("/auth/google", redirectUrl.origin).toString()
+    );
+  }
+
   // CSRF対策用のランダムなstate
   const state = crypto.randomBytes(32).toString("hex");
 
-  req.session.oauthState = state;
+  const now = Date.now();
+  const oauthStates = {
+    ...(req.session.oauthStates || {}),
+  };
+
+  Object.entries(oauthStates).forEach(
+    ([savedState, createdAt]) => {
+      if (now - createdAt > 10 * 60 * 1000) {
+        delete oauthStates[savedState];
+      }
+    }
+  );
+
+  oauthStates[state] = now;
+  req.session.oauthStates = oauthStates;
 
   const oauth2Client = createOAuthClient();
 
@@ -149,7 +173,14 @@ app.get("/auth/google", (req, res) => {
     prompt: "consent",
   });
 
-  res.redirect(authorizationUrl);
+  req.session.save((error) => {
+    if (error) {
+      console.error("OAuthセッション保存エラー:", error);
+      return res.status(500).send("認証を開始できませんでした。");
+    }
+
+    res.redirect(authorizationUrl);
+  });
 });
 
 // --------------------------------------------------
@@ -166,12 +197,21 @@ app.get("/oauth2callback", async (req, res) => {
     }
 
     // stateを確認
-    if (!state || state !== req.session.oauthState) {
+    const oauthStates = req.session.oauthStates || {};
+
+    if (
+      typeof state !== "string" ||
+      !Object.prototype.hasOwnProperty.call(
+        oauthStates,
+        state
+      )
+    ) {
       return res.status(400).send("OAuth stateが一致しません。");
     }
 
     // 一度使ったstateは削除
-    delete req.session.oauthState;
+    delete oauthStates[state];
+    req.session.oauthStates = oauthStates;
 
     if (!code) {
       return res.status(400).send("認証コードがありません。");
