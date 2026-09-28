@@ -74,8 +74,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   loadSettings();
 
-  loadTodos();
-
   applySettings();
 
   setupClock();
@@ -87,8 +85,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupThemes();
 
   setupFonts();
-
-  setupTodos();
 
   setupWeatherSearch();
 
@@ -377,6 +373,8 @@ function setupCalendarNavigation() {
     "click",
     async () => {
 
+      state.currentMonth.setDate(1);
+
       state.currentMonth.setMonth(
         state.currentMonth.getMonth() - 1
       );
@@ -394,6 +392,8 @@ function setupCalendarNavigation() {
   $("#next-month").addEventListener(
     "click",
     async () => {
+
+      state.currentMonth.setDate(1);
 
       state.currentMonth.setMonth(
         state.currentMonth.getMonth() + 1
@@ -1525,7 +1525,8 @@ async function loadWeather() {
   if (!location) {
 
     $("#weather").innerHTML =
-      `<span class="weather-text">
+      `<span class="weather-icon">－</span>
+       <span class="weather-text">
          天気を設定
        </span>`;
 
@@ -1637,7 +1638,7 @@ function renderWeather(data) {
 
 
   let text =
-    `${weather.icon} ${temperature}℃`;
+    `${temperature}℃`;
 
 
   if (
@@ -2085,7 +2086,7 @@ function updateSelectedWeatherLocation() {
    TODO
    ========================================================= */
 
-function loadTodos() {
+/*function loadTodos() {
 
   try {
 
@@ -2199,9 +2200,7 @@ function addTodo() {
   state.todos.unshift(todo);
 
 
-  /*
-   * 多すぎないよう100件まで
-   */
+  
   state.todos =
     state.todos.slice(0, 100);
 
@@ -2388,7 +2387,7 @@ function renderTodos() {
     }
   );
 }
-
+*/
 
 /* =========================================================
    Wake Lock
