@@ -1525,8 +1525,7 @@ async function loadWeather() {
   if (!location) {
 
     $("#weather").innerHTML =
-      `<span class="weather-icon">－</span>
-       <span class="weather-text">
+      `<span class="weather-text">
          天気を設定
        </span>`;
 
