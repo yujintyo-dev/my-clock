@@ -83,30 +83,9 @@ body[data-theme="lavender"] {
   --border: rgba(255,255,255,0.09);
 }
 
-body[data-theme="sand"] {
-  --bg: #38352f;
-  --panel: #474239;
-  --panel-soft: #514b40;
-  --text: #f8f5ec;
-  --text-soft: #d2cbbb;
-  --accent: #e4c98c;
-  --accent-soft: rgba(228,201,140,0.15);
-  --border: rgba(255,255,255,0.10);
-}
-
-body[data-theme="blue"] {
-  --bg: #202d3b;
-  --panel: #293a4d;
-  --panel-soft: #33475b;
-  --text: #f2f7fb;
-  --text-soft: #b6c6d4;
-  --accent: #8bc7e8;
-  --accent-soft: rgba(139,199,232,0.15);
-  --border: rgba(255,255,255,0.09);
-}
-
-/* 将来テーマ用 */
+/* 明るいテーマ */
 body[data-theme="peach"] {
+  color-scheme: light;
   --bg: #fff4ef;
   --panel: #ffffff;
   --panel-soft: #fff0e9;
@@ -118,6 +97,7 @@ body[data-theme="peach"] {
 }
 
 body[data-theme="mint"] {
+  color-scheme: light;
   --bg: #effaf5;
   --panel: #ffffff;
   --panel-soft: #e7f7ef;
@@ -631,7 +611,7 @@ body.hour-soon::after {
 .event-time {
   min-width: 0;
 
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
 
   color: var(--accent);
@@ -641,7 +621,7 @@ body.hour-soon::after {
 .event-countdown {
   min-width: 0;
 
-  font-size: 9px;
+  font-size: 10px;
   color: var(--text-soft);
 
   white-space: nowrap;
@@ -650,7 +630,7 @@ body.hour-soon::after {
 .event-title {
   margin-top: 3px;
 
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   line-height: 1.35;
 
@@ -663,7 +643,7 @@ body.hour-soon::after {
 .event-description-preview {
   margin-top: 2px;
 
-  font-size: 9px;
+  font-size: 10px;
   line-height: 1.35;
 
   color: var(--text-soft);
@@ -699,7 +679,7 @@ body.hour-soon::after {
 }
 
 .mail-from {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--text-soft);
 
   white-space: nowrap;
@@ -710,7 +690,7 @@ body.hour-soon::after {
 .mail-subject {
   margin-top: 2px;
 
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
   line-height: 1.35;
 
@@ -722,7 +702,7 @@ body.hour-soon::after {
 .mail-date {
   margin-top: 2px;
 
-  font-size: 8px;
+  font-size: 9px;
   color: var(--text-soft);
 }
 
@@ -1161,8 +1141,8 @@ body.hour-soon::after {
 .midnight-preview { background: #202532; }
 .forest-preview { background: #202d29; }
 .lavender-preview { background: #292738; }
-.sand-preview { background: #38352f; }
-.blue-preview { background: #202d3b; }
+.peach-preview { background: #fff4ef; }
+.mint-preview { background: #effaf5; }
 
 .font-sample {
   font-size: 15px;
@@ -1442,12 +1422,12 @@ body[data-font="notosans"] {
   }
 
   .event-title {
-    font-size: 9px;
+    font-size: 10px;
   }
 
   .event-time,
   .event-countdown {
-    font-size: 8px;
+    font-size: 9px;
   }
 
   .mail-item {
@@ -1455,7 +1435,7 @@ body[data-font="notosans"] {
   }
 
   .mail-subject {
-    font-size: 9px;
+    font-size: 10px;
   }
 
   .todo-input-row {
@@ -1512,11 +1492,13 @@ body[data-font="notosans"] {
 
   .left-content {
     width: 100%;
+    padding-top: clamp(20px, 4vh, 32px);
+    justify-content: flex-start;
   }
 
   .calendar-box {
     width: min(100%, 520px);
-    flex: 1 1 auto;
+    flex: 0 1 55%;
   }
 
   .theme-grid,

@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", async () => {
    * 定期更新
    *
    * Google APIを毎分叩かないよう、
-   * 5分ごとに更新する。
+    * 5分ごとに更新する。
    */
   setInterval(async () => {
 
@@ -793,7 +793,7 @@ async function loadUpcomingEvents() {
 
     const response =
       await fetch(
-        "/api/calendar/upcoming?limit=3"
+        "/api/calendar/upcoming?limit=5"
       );
 
     if (response.status === 401) {
