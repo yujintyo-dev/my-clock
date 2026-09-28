@@ -23,18 +23,17 @@ const SCOPES = [
 // 基本設定
 // --------------------------------------------------
 
-app.set("trust proxy", 1);
+app.use(express.json());
 
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || "change-this-session-secret",
     resave: false,
     saveUninitialized: false,
-    proxy: true,
     cookie: {
       httpOnly: true,
-      secure: true,
       sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
       maxAge: 1000 * 60 * 60 * 24 * 7,
     },
   })
@@ -275,7 +274,7 @@ app.get("/api/calendar/upcoming", async (req, res) => {
     }
 
     const limit = Math.min(
-      Math.max(Number(req.query.limit) || 3, 1),
+      Math.max(Number(req.query.limit) || 5, 1),
       10
     );
 
