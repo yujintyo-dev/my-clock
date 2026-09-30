@@ -51,74 +51,74 @@ body {
    ========================================================= */
 
 body[data-theme="midnight"] {
-  --bg: #202532;
-  --panel: #292f3d;
-  --panel-soft: #323949;
-  --text: #f4f6fa;
-  --text-soft: #aeb6c6;
-  --accent: #8fb7ff;
-  --accent-soft: rgba(143, 183, 255, 0.15);
-  --border: rgba(255,255,255,0.09);
+  --bg: #121923;
+  --panel: #1b2531;
+  --panel-soft: #263343;
+  --text: #f5f7fa;
+  --text-soft: #c3ced8;
+  --accent: #a9cfff;
+  --accent-soft: rgba(169, 207, 255, 0.16);
+  --border: rgba(255,255,255,0.12);
 }
 
 body[data-theme="forest"] {
-  --bg: #202d29;
-  --panel: #293b35;
-  --panel-soft: #324840;
-  --text: #f1f6f2;
-  --text-soft: #b4c6bc;
-  --accent: #91d4b1;
-  --accent-soft: rgba(145,212,177,0.15);
-  --border: rgba(255,255,255,0.09);
+  --bg: #14211c;
+  --panel: #1e3028;
+  --panel-soft: #2a4035;
+  --text: #f4f8f5;
+  --text-soft: #c4d2c8;
+  --accent: #a9dfbf;
+  --accent-soft: rgba(169,223,191,0.16);
+  --border: rgba(255,255,255,0.12);
 }
 
 body[data-theme="lavender"] {
   color-scheme: dark;
-  --bg: #72677d;
-  --panel: #4e4559;
-  --panel-soft: #5b5068;
-  --text: #ffffff;
-  --text-soft: #eee8f4;
-  --accent: #f0d5ff;
-  --accent-soft: rgba(240,213,255,0.2);
+  --bg: #607686;
+  --panel: #394f60;
+  --panel-soft: #4b6476;
+  --text: #f9fcff;
+  --text-soft: #dce7ee;
+  --accent: #c8e5f5;
+  --accent-soft: rgba(200,229,245,0.2);
   --border: rgba(255,255,255,0.2);
 }
 
 /* 明るいテーマ */
 body[data-theme="peach"] {
   color-scheme: light;
-  --bg: #fff4ef;
-  --panel: #ffffff;
-  --panel-soft: #fff0e9;
-  --text: #493c3b;
-  --text-soft: #6b5651;
-  --accent: #a34832;
-  --accent-soft: rgba(163,72,50,0.14);
-  --border: rgba(90,60,50,0.10);
+  --bg: #f8f4ec;
+  --panel: #fffdf9;
+  --panel-soft: #eee8dc;
+  --text: #2b3035;
+  --text-soft: #505b63;
+  --accent: #526d7a;
+  --accent-soft: rgba(82,109,122,0.14);
+  --border: rgba(53,45,36,0.14);
 }
 
 body[data-theme="mint"] {
   color-scheme: light;
-  --bg: #effaf5;
-  --panel: #ffffff;
-  --panel-soft: #e7f7ef;
-  --text: #354840;
-  --text-soft: #52675d;
-  --accent: #286b50;
-  --accent-soft: rgba(40,107,80,0.14);
-  --border: rgba(50,90,70,0.10);
+  --bg: #fff1f5;
+  --panel: #fffbfc;
+  --panel-soft: #f5dde6;
+  --text: #38262f;
+  --text-soft: #624a56;
+  --accent: #a14567;
+  --accent-soft: rgba(161,69,103,0.14);
+  --border: rgba(75,37,53,0.14);
 }
 
 body[data-theme="sky"] {
   color-scheme: dark;
-  --bg: #607681;
-  --panel: #455966;
-  --panel-soft: #526b78;
-  --text: #ffffff;
-  --text-soft: #e7f0f4;
-  --accent: #caf0ff;
-  --accent-soft: rgba(202,240,255,0.2);
-  --border: rgba(255,255,255,0.22);
+  --bg: #4f7680;
+  --panel: #2f5660;
+  --panel-soft: #3e6871;
+  --text: #f6ffff;
+  --text-soft: #d8eeee;
+  --accent: #bce9e6;
+  --accent-soft: rgba(188,233,230,0.2);
+  --border: rgba(255,255,255,0.2);
 }
 
 /* 毎時55～59分 */
@@ -1122,12 +1122,12 @@ body.hour-soon::after {
   border-radius: 5px;
 }
 
-.midnight-preview { background: #202532; }
-.forest-preview { background: #202d29; }
-.lavender-preview { background: #72677d; }
-.sky-preview { background: #607681; }
-.peach-preview { background: #fff4ef; }
-.mint-preview { background: #effaf5; }
+.midnight-preview { background: #121923; }
+.forest-preview { background: #14211c; }
+.lavender-preview { background: #607686; }
+.sky-preview { background: #4f7680; }
+.peach-preview { background: #f8f4ec; }
+.mint-preview { background: #fff1f5; }
 
 .font-sample {
   font-size: 15px;
