@@ -16,7 +16,6 @@ const PUBLIC_PATH = path.join(__dirname, "public");
 // Google OAuthで利用する権限
 const SCOPES = [
   "https://www.googleapis.com/auth/calendar.readonly",
-  "https://www.googleapis.com/auth/gmail.readonly",
 ];
 
 // --------------------------------------------------
@@ -445,108 +444,6 @@ app.get("/api/calendar/month", async (req, res) => {
 
     res.status(500).json({
       message: "月間カレンダーの取得に失敗しました。",
-    });
-  }
-});
-
-// --------------------------------------------------
-// Gmail
-// --------------------------------------------------
-
-function getHeader(message, name) {
-  const headers =
-    message.payload?.headers || [];
-
-  const header = headers.find(
-    (item) =>
-      item.name.toLowerCase() === name.toLowerCase()
-  );
-
-  return header?.value || "";
-}
-
-app.get("/api/gmail/unread", async (req, res) => {
-  try {
-    const auth = await getGoogleClient();
-
-    if (!auth) {
-      return res.status(401).json({
-        connected: false,
-        message: "Googleと接続してください。",
-      });
-    }
-
-    const limit = Math.min(
-      Math.max(Number(req.query.limit) || 5, 1),
-      10
-    );
-
-    const gmail = google.gmail({
-      version: "v1",
-      auth,
-    });
-
-    const listResult =
-      await gmail.users.messages.list({
-        userId: "me",
-        q: "is:unread",
-        maxResults: limit,
-      });
-
-    const messages =
-      listResult.data.messages || [];
-
-    const results = [];
-
-    for (const item of messages) {
-      try {
-        const detail =
-          await gmail.users.messages.get({
-            userId: "me",
-            id: item.id,
-            format: "metadata",
-            metadataHeaders: [
-              "From",
-              "Subject",
-              "Date",
-            ],
-          });
-
-        results.push({
-          id: detail.data.id,
-          threadId: detail.data.threadId,
-          from: getHeader(detail.data, "From"),
-          subject:
-            getHeader(detail.data, "Subject") ||
-            "(件名なし)",
-          date: getHeader(detail.data, "Date"),
-        });
-      } catch (messageError) {
-        console.error(
-          "Gmailメッセージ取得エラー:",
-          messageError
-        );
-      }
-    }
-
-    res.json({
-      connected: true,
-      messages: results,
-    });
-  } catch (error) {
-    console.error("Gmail取得エラー:", error);
-
-    if (error.code === 401) {
-      await deleteTokens();
-
-      return res.status(401).json({
-        connected: false,
-        message: "Googleの認証が無効になっています。",
-      });
-    }
-
-    res.status(500).json({
-      message: "Gmailの取得に失敗しました。",
     });
   }
 });
