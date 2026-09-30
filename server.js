@@ -317,7 +317,7 @@ app.get("/api/calendar/upcoming", async (req, res) => {
     }
 
     const limit = Math.min(
-      Math.max(Number(req.query.limit) || 5, 1),
+      Math.max(Number(req.query.limit) || 6, 1),
       10
     );
 
