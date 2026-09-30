@@ -1,4 +1,4 @@
-const CACHE_NAME = "my-clock-v10";
+const CACHE_NAME = "my-clock-v13";
 
 const APP_FILES = [
   "/",
@@ -15,12 +15,22 @@ self.addEventListener(
 
     event.waitUntil(
       caches.open(CACHE_NAME)
-        .then((cache) => {
+        .then(async (cache) => {
+          await Promise.all(
+            APP_FILES.map(async (file) => {
+              const response = await fetch(
+                `${file}?cache-version=${CACHE_NAME}`
+              );
 
-          return cache.addAll(
-            APP_FILES
+              if (!response.ok) {
+                throw new Error(
+                  `アプリファイルを取得できません: ${file}`
+                );
+              }
+
+              await cache.put(file, response);
+            })
           );
-
         })
     );
 

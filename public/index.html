@@ -210,39 +210,56 @@
       </header>
 
 
-      <!-- ======================================
-           NEXT
-           ====================================== -->
+      <div class="right-content">
 
-      <section class="dashboard-section">
+        <section class="dashboard-section calendar-events-section">
 
-        <div class="section-heading">
+          <div class="section-heading">
 
-          <span class="section-title">
-            NEXT
-          </span>
+            <span class="section-title">
+              NEXT
+            </span>
 
-          <span
-            id="calendar-status"
-            class="section-status"
-          >
-          </span>
+            <span
+              id="calendar-status"
+              class="section-status"
+            >
+            </span>
 
-        </div>
-
-        <div
-          id="calendar"
-          class="event-list"
-        >
-
-          <div class="empty-state">
-            Googleカレンダーと接続すると
-            予定が表示されます
           </div>
 
-        </div>
+          <div
+            id="calendar"
+            class="event-list"
+          >
 
-      </section>
+            <div class="empty-state">
+              Googleカレンダーと接続すると
+              予定が表示されます
+            </div>
+
+          </div>
+
+        </section>
+
+        <section class="dashboard-section daily-quote-section">
+
+          <div class="section-heading">
+            <span class="section-title">今日の格言</span>
+            <span
+              id="daily-quote-period"
+              class="section-status"
+            ></span>
+          </div>
+
+          <blockquote
+            id="daily-quote-text"
+            class="daily-quote-text"
+          ></blockquote>
+
+        </section>
+
+      </div>
 
 
       <!-- ======================================
@@ -505,15 +522,6 @@
 
             <button
               class="theme-option"
-              data-theme="lavender"
-              type="button"
-            >
-              <span class="theme-preview lavender-preview"></span>
-              <span>Lavender</span>
-            </button>
-
-            <button
-              class="theme-option"
               data-theme="peach"
               type="button"
             >
@@ -528,6 +536,24 @@
             >
               <span class="theme-preview mint-preview"></span>
               <span>Mint</span>
+            </button>
+
+            <button
+              class="theme-option"
+              data-theme="lavender"
+              type="button"
+            >
+              <span class="theme-preview lavender-preview"></span>
+              <span>Lavender</span>
+            </button>
+
+            <button
+              class="theme-option"
+              data-theme="sky"
+              type="button"
+            >
+              <span class="theme-preview sky-preview"></span>
+              <span>Sky</span>
             </button>
 
           </div>

@@ -21,6 +21,25 @@ const WEATHER_GEOCODING_URL =
 const WEATHER_FORECAST_URL =
   "https://api.open-meteo.com/v1/forecast";
 
+const DAILY_QUOTES = [
+  "始める前に完璧を求めず、始めてから整えていく。",
+  "小さな約束を守ることが、大きな自信をつくる。",
+  "続ける工夫も、才能のひとつ。",
+  "迷ったときは、あとで誇れる方を選ぶ。",
+  "急ぐ日ほど、足元の一歩を確かめる。",
+  "昨日の自分と比べると、進歩は見つけやすい。",
+  "問いを変えると、見える道も変わる。",
+  "休むことは、歩みを止めることではない。",
+  "できることから始めれば、景色が少しずつ変わる。",
+  "聞く時間を増やすと、考えは深くなる。",
+  "失敗は、方法を更新するための材料になる。",
+  "遠回りに見える経験が、あとで道しるべになる。",
+  "丁寧な一日が、穏やかな自信を連れてくる。",
+  "一度にひとつ。それだけで前へ進める。",
+  "感謝に気づくと、いつもの景色に余白ができる。",
+  "続ける日は、短くても手を動かしてみる。",
+];
+
 
 /* =========================================================
    アプリ状態
@@ -170,6 +189,8 @@ function updateClock() {
 
   updateDate(now);
 
+  updateDailyQuote(now);
+
   /*
    * 予定のカウントダウンも更新
    */
@@ -196,6 +217,56 @@ function updateDate(date) {
     `（${weekdays[date.getDay()]}）`;
 
   $("#date").textContent = text;
+}
+
+
+function getDailyQuoteIndex(date, period) {
+
+  const dateKey =
+    `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+
+  const seed = `${dateKey}:${period}`;
+  let hash = 2166136261;
+
+  for (let index = 0; index < seed.length; index += 1) {
+    hash = Math.imul(
+      hash ^ seed.charCodeAt(index),
+      16777619
+    );
+  }
+
+  return (hash >>> 0) % DAILY_QUOTES.length;
+}
+
+
+function updateDailyQuote(now) {
+
+  const isAfternoon = now.getHours() >= 12;
+  const period = isAfternoon ? "pm" : "am";
+  const dateKey =
+    `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+  const periodKey = `${dateKey}:${period}`;
+  const quoteElement = $("#daily-quote-text");
+
+  if (!quoteElement || quoteElement.dataset.periodKey === periodKey) {
+    return;
+  }
+
+  let quoteIndex = getDailyQuoteIndex(now, period);
+
+  if (isAfternoon) {
+    const morningIndex = getDailyQuoteIndex(now, "am");
+    quoteIndex %= DAILY_QUOTES.length - 1;
+
+    if (quoteIndex >= morningIndex) {
+      quoteIndex += 1;
+    }
+  }
+
+  quoteElement.textContent = DAILY_QUOTES[quoteIndex];
+  quoteElement.dataset.periodKey = periodKey;
+  $("#daily-quote-period").textContent =
+    isAfternoon ? "午後" : "午前";
 }
 
 
@@ -790,7 +861,7 @@ async function loadUpcomingEvents() {
 
     const response =
       await fetch(
-        "/api/calendar/upcoming?limit=5"
+        "/api/calendar/upcoming?limit=6"
       );
 
     if (response.status === 401) {

@@ -73,13 +73,14 @@ body[data-theme="forest"] {
 }
 
 body[data-theme="lavender"] {
-  --bg: #292738;
-  --panel: #353149;
-  --panel-soft: #403a56;
-  --text: #f5f3fa;
-  --text-soft: #c4bdd7;
-  --accent: #c3a8f5;
-  --accent-soft: rgba(195,168,245,0.15);
+  color-scheme: dark;
+  --bg: #746784;
+  --panel: #807391;
+  --panel-soft: #8d809e;
+  --text: #fbf8ff;
+  --text-soft: #e0d7e9;
+  --accent: #e5c4f2;
+  --accent-soft: rgba(229,196,242,0.2);
   --border: rgba(255,255,255,0.09);
 }
 
@@ -108,37 +109,16 @@ body[data-theme="mint"] {
   --border: rgba(50,90,70,0.10);
 }
 
-body[data-theme="lemon"] {
-  --bg: #fffceb;
-  --panel: #ffffff;
-  --panel-soft: #fff8d8;
-  --text: #494631;
-  --text-soft: #817b5c;
-  --accent: #d6b94f;
-  --accent-soft: rgba(214,185,79,0.14);
-  --border: rgba(100,90,30,0.10);
-}
-
 body[data-theme="sky"] {
-  --bg: #eef8ff;
-  --panel: #ffffff;
-  --panel-soft: #e4f3fc;
-  --text: #354653;
-  --text-soft: #71818c;
-  --accent: #65a9d0;
-  --accent-soft: rgba(101,169,208,0.14);
-  --border: rgba(50,90,120,0.10);
-}
-
-body[data-theme="pink"] {
-  --bg: #fff0f6;
-  --panel: #ffffff;
-  --panel-soft: #ffe5ef;
-  --text: #4c3942;
-  --text-soft: #806b74;
-  --accent: #d77fa2;
-  --accent-soft: rgba(215,127,162,0.14);
-  --border: rgba(100,50,70,0.10);
+  color-scheme: dark;
+  --bg: #5d7c8d;
+  --panel: #6b8999;
+  --panel-soft: #7896a5;
+  --text: #f6fbfd;
+  --text-soft: #d8e6ec;
+  --accent: #b7e4f2;
+  --accent-soft: rgba(183,228,242,0.2);
+  --border: rgba(255,255,255,0.12);
 }
 
 /* 毎時55～59分 */
@@ -442,6 +422,18 @@ body.hour-soon::after {
   overflow: hidden;
 }
 
+.right-content {
+  width: min(100%, 390px);
+  min-height: 0;
+  flex: 0 1 auto;
+  align-self: center;
+  margin-block: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.2vh, 14px);
+}
+
 .top-bar {
   flex: 0 0 auto;
 
@@ -523,6 +515,27 @@ body.hour-soon::after {
 
 .dashboard-section:nth-of-type(2) {
   flex: 0.9 1 0;
+}
+
+.right-content > .dashboard-section.calendar-events-section {
+  width: 100%;
+  flex: 0 1 auto;
+}
+
+.right-content > .daily-quote-section {
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.daily-quote-text {
+  margin: 0;
+  padding-left: 10px;
+
+  border-left: 2px solid var(--accent);
+
+  color: var(--text);
+  font-size: clamp(12px, 1.2vw, 15px);
+  line-height: 1.7;
 }
 
 .todo-section {
@@ -1058,7 +1071,12 @@ body.hour-soon::after {
   color: var(--text-soft);
 }
 
-.theme-grid,
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
 .font-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -1106,7 +1124,8 @@ body.hour-soon::after {
 
 .midnight-preview { background: #202532; }
 .forest-preview { background: #202d29; }
-.lavender-preview { background: #292738; }
+.lavender-preview { background: #746784; }
+.sky-preview { background: #5d7c8d; }
 .peach-preview { background: #fff4ef; }
 .mint-preview { background: #effaf5; }
 
@@ -1459,7 +1478,6 @@ body[data-font="notosans"] {
     flex: 0 1 55%;
   }
 
-  .theme-grid,
   .font-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
