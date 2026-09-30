@@ -553,7 +553,6 @@ body.hour-soon::after {
 }
 
 .event-list,
-.mail-list,
 .todo-list {
   min-height: 0;
   overflow: auto;
@@ -651,59 +650,6 @@ body.hour-soon::after {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-/* =========================================================
-   Gmail
-   ========================================================= */
-
-.mail-list {
-  display: flex;
-  flex-direction: column;
-}
-
-.mail-item {
-  padding: 6px 3px;
-
-  border-bottom: 1px solid var(--border);
-
-  cursor: pointer;
-}
-
-.mail-item:last-child {
-  border-bottom: 0;
-}
-
-.mail-item:hover {
-  background: var(--panel-soft);
-}
-
-.mail-from {
-  font-size: 11px;
-  color: var(--text-soft);
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.mail-subject {
-  margin-top: 2px;
-
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.35;
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.mail-date {
-  margin-top: 2px;
-
-  font-size: 9px;
-  color: var(--text-soft);
 }
 
 /* =========================================================
@@ -920,6 +866,26 @@ body.hour-soon::after {
   overflow: auto;
 
   padding: 16px 18px;
+}
+
+.settings-legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  margin-top: 20px;
+  padding-top: 12px;
+
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+}
+
+.settings-legal-links a {
+  color: var(--text-soft);
+}
+
+.settings-legal-links a:hover {
+  color: var(--text);
 }
 
 .settings-group {
@@ -1428,14 +1394,6 @@ body[data-font="notosans"] {
   .event-time,
   .event-countdown {
     font-size: 9px;
-  }
-
-  .mail-item {
-    padding: 3px;
-  }
-
-  .mail-subject {
-    font-size: 10px;
   }
 
   .todo-input-row {
