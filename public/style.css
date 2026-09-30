@@ -74,14 +74,14 @@ body[data-theme="forest"] {
 
 body[data-theme="lavender"] {
   color-scheme: dark;
-  --bg: #746784;
-  --panel: #807391;
-  --panel-soft: #8d809e;
+  --bg: #82788b;
+  --panel: #5e5569;
+  --panel-soft: #6b6177;
   --text: #fbf8ff;
-  --text-soft: #e0d7e9;
-  --accent: #e5c4f2;
-  --accent-soft: rgba(229,196,242,0.2);
-  --border: rgba(255,255,255,0.09);
+  --text-soft: #e4deeb;
+  --accent: #f0d5ff;
+  --accent-soft: rgba(240,213,255,0.2);
+  --border: rgba(255,255,255,0.2);
 }
 
 /* 明るいテーマ */
@@ -111,14 +111,14 @@ body[data-theme="mint"] {
 
 body[data-theme="sky"] {
   color-scheme: dark;
-  --bg: #5d7c8d;
-  --panel: #6b8999;
-  --panel-soft: #7896a5;
+  --bg: #778b96;
+  --panel: #526b78;
+  --panel-soft: #607c8a;
   --text: #f6fbfd;
-  --text-soft: #d8e6ec;
-  --accent: #b7e4f2;
-  --accent-soft: rgba(183,228,242,0.2);
-  --border: rgba(255,255,255,0.12);
+  --text-soft: #dce8ee;
+  --accent: #caf0ff;
+  --accent-soft: rgba(202,240,255,0.2);
+  --border: rgba(255,255,255,0.22);
 }
 
 /* 毎時55～59分 */
@@ -1124,8 +1124,8 @@ body.hour-soon::after {
 
 .midnight-preview { background: #202532; }
 .forest-preview { background: #202d29; }
-.lavender-preview { background: #746784; }
-.sky-preview { background: #5d7c8d; }
+.lavender-preview { background: #82788b; }
+.sky-preview { background: #778b96; }
 .peach-preview { background: #fff4ef; }
 .mint-preview { background: #effaf5; }
 
